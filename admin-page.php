@@ -8,25 +8,23 @@
     <h2>Permanent Links</h2>
     <form method=”POST” action=”” >
     <table class=”form-table” >
-    <tr valign=”top” >
-    <th scope=”row” > < label for=”fname” > First Name </label> </th>
-    <td> <input maxlength=”45” size=”25” name=”fname” /> </td>
-    </tr>
-    <tr valign=”top”>
-    <th scope=”row”> <label for=”lname”> Last Name </label ></th>
-    <td> <input id=”lname” maxlength=”45” size=”25” name=”lname” /></td>
-    < /tr >
-    <tr valign=”top”>
-    <th scope=”row”><label for=”color”>Favorite Color</label ></th >
-    <td>
-    <select name=”color”>
+        <tr valign=”top” >
+            <th scope=”row” ><label for=”fname”>First Name</label></th>
+            <td><input maxlength=”45” size=”25” name=”fname” /></td>
+        </tr>
+        <tr valign=”top”>
+            <th scope=”row”> <label for=”lname”> Last Name </label ></th>
+            <td><input id=”lname” maxlength=”45” size=”25” name=”lname” /></td>
+        </tr>
+        <tr valign=”top”>
+            <th scope=”row”><label for=”color”>Favorite Color</label></th>
+            <td>
+                <select name=”color”>
 
-    </td >
-    </tr >
-    FIGURE 4 - 16
-    FIGURE 4 - 15
-    Keeping It Consistent ❘ 93
-    www
+                </select>
+            </td>
+        </tr>
+    </table>
     
 	
 <?php
@@ -40,7 +38,18 @@ foreach ($arr as $key):
         <?php echo $this->get_description_by_slug('') ?>
         </a>
 <?php endforeach; ?>
-    
-   <?php var_dump($this->get_all_posts());
-   ?>
-    </div>
+        <p><?php echo sprintf(__('Insert the following rows into your %s file:',PL_DOMAIN),'<code>functions.php</code>') ?></p>
+        <pre style='background-color: #eaeaea'>
+            function my_permalinks(){
+                register_permanent_link(array(
+                    'slug' => 'your_slug',
+                    'description' => 'your_description',
+                    ));
+                }
+            add_action('init', 'my_permalinks');
+        </pre>
+        <p><?php echo sprintf(__('Insert the following function into your %s files:',PL_DOMAIN),'<code>Page Template</code>') ?></p>
+        <code>
+             wp_permanent_link('slug', 'text', 'class');
+        </code>
+</div>

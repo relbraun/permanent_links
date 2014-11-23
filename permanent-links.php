@@ -6,7 +6,7 @@ Description: This plugin enalbe you to insert permanent link into page templates
 Author: Ariel Braun
 Version: 1.6
 */
-
+define(PL_DOMAIN, 'pl_domain');
 include 'Permalinks.php';
 global $PL;
 $PL=new Permalinks();
@@ -31,8 +31,8 @@ function register_permanent_link($args)
 function wp_permanent_link($location, $text, $class)
 {
     global $PL;
-    foreach ($PL->links['slug'] as $slug){
-        if($slug == $location){
+    foreach ($PL->links as $l){
+        if($l['slug'] == $location){
             $link=$PL->get_link_by_slug($location);
             $link->render($text, $class);
 

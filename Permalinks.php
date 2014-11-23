@@ -162,10 +162,16 @@ class Link
     protected $description;
     
     protected $displaing=false;
-    
+    /**
+     * 
+     * @global Permalinks $PL
+     * @param string $slug
+     * @param int $post_id
+     */
     public function __construct($slug, $post_id=null)
     {
-        $this->description;
+        global $PL;
+        $this->description=$PL->get_description_by_slug($slug);
        $opt =  get_option('permanent-link_'.$slug);
        if($opt !== false)
            $this->post_id=$opt;
