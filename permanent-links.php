@@ -12,7 +12,7 @@ global $PL;
 $PL=new Permalinks();
 
 /**
- * 
+ * @global Permalink $PL
  * @param array $args Including 'slug' => the unique name of the link and description => a description 
  */
 
@@ -35,6 +35,7 @@ function wp_permanent_link($location, $text, $class)
         if($slug == $location){
             $link=$PL->get_link_by_slug($location);
             $link->render($text, $class);
+
         }
     }
 }

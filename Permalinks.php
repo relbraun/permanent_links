@@ -25,10 +25,23 @@ class Permalinks
     {
         if(is_array($repma) && isset($repma['slug']))
         {
-            $this->links['slug'][]=$repma['slug'];
-            $this->links['description'][]=isset($repma['description']) ? $repma['description']: $repma['slug'];
+            $this->links[]=array('slug'=>$repma['slug'],
+                                'description' => isset($repma['description']) ? $repma['description']: $repma['slug']);
         }
         
+    }
+
+    /**
+     * @param string $slug
+     * @return string|bool string if the slug exists with its description, false if not.
+     */
+    public function get_description_by_slug($slug)
+    {
+        foreach($this->links as $link){
+            if($link['slug']==$slug)
+                return $link['description'];
+        }
+        return false;
     }
     
     public function get_link_by_slug($slug)
@@ -145,11 +158,14 @@ class Link
     public $post_id;
     
     public $slug;
+
+    protected $description;
     
     protected $displaing=false;
     
     public function __construct($slug, $post_id=null)
-    { 
+    {
+        $this->description;
        $opt =  get_option('permanent-link_'.$slug);
        if($opt !== false)
            $this->post_id=$opt;
@@ -157,6 +173,13 @@ class Link
            $this->post_id=$post_id;
        if(isset($_GET['represent']))
            $this->displaing=true;
+    }
+
+    public function __get($val)
+    {
+        $met='get'.$val;
+        if(method_exists($this, $met))
+            return $this->$met();
     }
     
     public function render($text, $class='')
@@ -168,6 +191,11 @@ class Link
     public function save()
     {
         update_option('permanent-link_'.$this->slug, $this->post_id);
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
     }
     
     protected function enqueue_style()
