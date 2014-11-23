@@ -1,0 +1,14 @@
+/* 
+    Document   : style
+    Created on : 22/11/2014, 23:34:43
+    Author     : Kalman
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+a.perma-thickbox{
+    border: 3px dashed red;
+    border-radius: 12px;
+    padding: 5px;
+}
+
