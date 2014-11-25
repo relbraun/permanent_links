@@ -14,6 +14,8 @@ class Permalinks
 {
     public $links=array();
     
+    protected $all_posts;
+    
     protected $query_string='&';
     
     public function __construct()
@@ -41,7 +43,7 @@ class Permalinks
             if($link['slug']==$slug)
                 return $link['description'];
         }
-        return false;
+        return $slug;
     }
     
     public function get_link_by_slug($slug)
@@ -69,7 +71,7 @@ class Permalinks
     }
     /**
      * 
-     * @return array The paths to all templates containing the awesome function wp_permanent_link. 
+     * @return array A slug => file_path to all templates containing the awesome function wp_permanent_link. 
      */
     protected function get_templates_with_code()
     {
@@ -80,11 +82,14 @@ class Permalinks
             $strstr=strstr($content, 'wp_permanent_link');
             
             if(Strstr){
-                preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slug);
-                    $templates[]=$file;
+                preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slugs);
+                foreach ($slugs[1] as $slug)
+                {
+                    $templates[$slug]=$file;
+                }   
             }
         }
-        var_dump($slug);die;
+        
         return $templates;
     }
     
@@ -92,8 +97,8 @@ class Permalinks
     {
         $arr;
         $temps=$this->get_templates_with_code();
-        foreach ($temps as $temp){
-            $arr[]=$this->get_post_by_template($temp);
+        foreach ($temps as $slug => $file){
+            $arr[$file]=$this->get_post_by_template($file);
         }
         return $arr;
     }
@@ -127,13 +132,22 @@ class Permalinks
         return $posts;
     }
     
+    protected function renderAllPosts()
+    {
+        foreach($this->all_posts as $post){
+            echo "<option value='{$post->ID}'>{$post->post_title}</option>\n";
+        }
+    }
+    
     protected function init()
     {
         if($this->is_permalinked())
             $this->query_string='?';
+        $this->all_posts=$this->get_all_posts();
         add_action('admin_menu', array(&$this, 'register_admin_menu'));
         add_action('admin_enqueue_scripts', array(&$this, 'admin_script'));
         add_action('wp_enqueue_scripts', array(&$this, 'enqueue_style'));
+        add_action('wp_ajax_save_permanent_link', array(&$this, 'save'));
     }
     /*******************************************************************
      *                          HOOKS                                  *
@@ -153,6 +167,14 @@ class Permalinks
     public function enqueue_style()
     {
         wp_enqueue_style('enqueue_permanent_styel', plugin_dir_url(__FILE__).'/css/style.css');
+    }
+    
+    public function save()
+    {
+        $link=new Link($_POST['slug']);
+        $link->post_id=$_POST['post'];
+        $link->save();
+        die;
     }
    
 }
