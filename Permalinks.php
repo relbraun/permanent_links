@@ -77,9 +77,14 @@ class Permalinks
         $files=  array_values(get_page_templates());
         foreach($files as $file){
             $content=  file_get_contents(STYLESHEETPATH.DIRECTORY_SEPARATOR.$file);
-            if(strstr($content, 'wp_permanent_link'))
+            $strstr=strstr($content, 'wp_permanent_link');
+            
+            if(Strstr){
+                preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slug);
                     $templates[]=$file;
+            }
         }
+        var_dump($slug);die;
         return $templates;
     }
     
