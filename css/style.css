@@ -7,8 +7,6 @@
 */
 
 a.perma-thickbox{
-    border: 3px dashed red;
-    border-radius: 12px;
-    padding: 5px;
+    box-shadow: 0 0 12px 12px #f66;
 }
 
