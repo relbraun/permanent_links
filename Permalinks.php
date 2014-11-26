@@ -69,6 +69,11 @@ class Permalinks
         else
             return null;
     }
+    
+    protected function get_post_by_slug($slug)
+    {
+        return get_option('permanent-link_'.$slug);
+    }
     /**
      * 
      * @return array A slug => file_path to all templates containing the awesome function wp_permanent_link. 
@@ -132,10 +137,11 @@ class Permalinks
         return $posts;
     }
     
-    protected function renderAllPosts()
+    protected function renderAllPosts($post_id)
     {
         foreach($this->all_posts as $post){
-            echo "<option value='{$post->ID}'>{$post->post_title}</option>\n";
+            $selected=selected($post_id, $post->ID,false);
+            echo "<option value='{$post->ID}' {$selected}>{$post->post_title}</option>\n";
         }
     }
     
@@ -198,6 +204,7 @@ class Link
     public function __construct($slug, $post_id=null)
     {
         global $PL;
+        $this->slug=$slug;
         $this->description=$PL->get_description_by_slug($slug);
        $opt =  get_option('permanent-link_'.$slug);
        if($opt !== false)

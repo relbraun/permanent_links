@@ -17,13 +17,13 @@
         
       <tr valign=”top” >
           <th scope=”row” >
-            <a href="<?php echo get_permalink($this->get_post_by_template($file)).$qs; ?>represent=1&TB_iframe=true&width=970&height=660" class="thickbox button-secondary">
+            <a href="<?php echo get_permalink($this->get_post_by_slug($slug)).$qs; ?>represent=1&TB_iframe=true&width=970&height=660" class="thickbox button-secondary">
                 <?php echo $this->get_description_by_slug($slug) ?>
             </a>
           </th>
           <td>
                 <select name=”color”>
-                    <?php $this->renderAllPosts(); ?>
+                    <?php $this->renderAllPosts($this->get_post_by_slug($slug)); ?>
                 </select>
           </td>
           <td>
