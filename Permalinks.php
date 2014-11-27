@@ -212,7 +212,7 @@ class Link
        if($post_id!==null)
            $this->post_id=$post_id;
        if(isset($_GET['represent']))
-           $this->displaing=true;
+           $this->displaing=$_GET['represent'];
     }
 
     public function __get($val)
@@ -224,7 +224,9 @@ class Link
     
     public function render($text, $class='')
     {
-        $display=$this->displaing ? ' perma-thickbox' : '';
+        $display='';
+        if($this->displaing && $this->displaing==$this->slug)
+            $display=' perma-thickbox';
         echo "<a href='".get_permalink($this->post_id)."' class='{$class}{$display}'>{$text}</a>";
     }
     
