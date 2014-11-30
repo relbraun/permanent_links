@@ -161,7 +161,7 @@ class Permalinks
     
     public function register_admin_menu()
     {
-        add_theme_page( 'permanent-links', 'Permanent Links', 'edit_theme_options', __FILE__, array(&$this, 'link_page') );
+        add_theme_page( 'Permanent Links', 'Permanent Links', 'edit_theme_options', __FILE__, array(&$this, 'link_page') );
     }
     
     public function admin_script($hook)
