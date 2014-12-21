@@ -86,7 +86,26 @@ class Permalinks
             $content=  file_get_contents(STYLESHEETPATH.DIRECTORY_SEPARATOR.$file);
             $strstr=strstr($content, 'wp_permanent_link');
             
-            if(Strstr){
+            if($strstr){
+                preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slugs);
+                foreach ($slugs[1] as $slug)
+                {
+                    $templates[$slug]=$file;
+                }   
+            }
+        }
+        
+        return $templates;
+    }
+    
+    protected function get_files_with_code()
+    {
+        $templates=array();
+        $files=  array_values(wp_get_theme()->get_files(null, -1));
+        foreach($files as $file){
+            $content=  file_get_contents($file);
+            $strstr=strstr($content, 'wp_permanent_link');
+            if($strstr){
                 preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slugs);
                 foreach ($slugs[1] as $slug)
                 {
