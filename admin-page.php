@@ -11,7 +11,8 @@
 <?php
     $qs=$this->is_permalinked() ? '?' : '&';
     add_thickbox(); 
-    $arr=$this->get_templates_with_code();
+    $arr=$this->get_files_with_code(STYLESHEETPATH);
+	//var_dump($arr);die;
     foreach ($arr as $slug => $file):
 ?>
         

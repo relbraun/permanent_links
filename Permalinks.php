@@ -82,11 +82,12 @@ class Permalinks
     {
         $templates=array();
         $files=  array_values(get_page_templates());
+	    //var_dump(get_page_templates());die;
         foreach($files as $file){
             $content=  file_get_contents(STYLESHEETPATH.DIRECTORY_SEPARATOR.$file);
             $strstr=strstr($content, 'wp_permanent_link');
             
-            if(Strstr){
+            if($strstr){
                 preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slugs);
                 foreach ($slugs[1] as $slug)
                 {
@@ -97,10 +98,35 @@ class Permalinks
         
         return $templates;
     }
+
+	protected function get_files_with_code($dir, & $stack = [])
+	{
+		$files = glob($dir.'/*');
+
+		foreach($files as $file){
+
+			if(in_array($file, ['.', '..']))
+				continue;
+
+			if(is_dir($file)){
+				return array_merge($stack, $this->get_files_with_code($file, $stack));
+			}
+			$content=  file_get_contents($file);
+			$strstr=strstr($content, 'wp_permanent_link');
+			if($strstr){
+				preg_match_all("/\(\s*['\"](\w+)['\"]\s*,/", $strstr, $slugs);
+				foreach ($slugs[1] as $slug)
+				{
+					$stack[$slug]=$file;
+				}
+			}
+		}
+		return $stack;
+	}
     
     public function get_posts_links()
     {
-        $arr;
+        $arr=[];
         $temps=$this->get_templates_with_code();
         foreach ($temps as $slug => $file){
             $arr[$file]=$this->get_post_by_template($file);
